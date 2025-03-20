@@ -7,19 +7,19 @@ blueprint:
     Added incremental color temperature adjustment.
   domain: automation
   input:
-    light_entity:
+    middle_button:
       name: Light Entity
       description: The light to control.
       selector:
         entity:
           domain: light
-    light_entity_2:
+    left_button:
       name: Light Entity 2
       description: The light to control.
       selector:
         entity:
           domain: light
-    light_entity_3:
+    right_button:
       name: Light Entity 3
       description: The light to control.
       selector:
@@ -140,12 +140,12 @@ trigger:
     id: dim_stop
 
 variables:
-  light_entity: !input light_entity
-  light_entity_2: !input light_entity_2
-  light_entity_3: !input light_entity_3
+  middle_button: !input middle_button
+  left_button: !input left_button
+  right_button: !input right_button
   transition_on_ff: !input transition_for_on_off_state_change_in_seconds
   step_brightness: !input brightness_step
-  current_brightness: "{{ state_attr(light_entity, 'brightness') | float(0) }}"
+  current_brightness: "{{ state_attr(middle_button, 'brightness') | float(0) }}"
 
 
 action:
@@ -156,7 +156,7 @@ action:
         sequence:
           - service: light.turn_on
             target:
-              entity_id: !input light_entity
+              entity_id: !input middle_button
             data:
               brightness_pct: 100
               transition: !input transition_for_on_off_state_change_in_seconds
@@ -167,7 +167,7 @@ action:
         sequence:
           - service: light.turn_off
             target:
-              entity_id: !input light_entity
+              entity_id: !input middle_button
             data:
               transition: "{{ (transition_on_ff / 255) * current_brightness | float(0) }}"
 
@@ -177,7 +177,7 @@ action:
         sequence:
           - service: light.toggle
             target:
-              entity_id: !input light_entity_2
+              entity_id: !input left_button
             data:
               brightness_pct: 100
               transition: !input transition_for_on_off_state_change_in_seconds
@@ -187,7 +187,7 @@ action:
         sequence:
           - service: light.toggle
             target:
-              entity_id: !input light_entity_3
+              entity_id: !input right_button
             data:
               brightness_pct: 100
               transition: !input transition_for_on_off_state_change_in_seconds
@@ -200,7 +200,7 @@ action:
               sequence:
                 - service: light.turn_on
                   target:
-                    entity_id: !input light_entity
+                    entity_id: !input middle_button
                   data:
                     brightness_step_pct: "-{{ step_brightness | int(5) }}"
                     transition: !input transition_seconds
@@ -217,7 +217,7 @@ action:
               sequence:
                 - service: light.turn_on
                   target:
-                    entity_id: !input light_entity
+                    entity_id: !input middle_button
                   data:
                     brightness_step_pct: "{{ step_brightness | int(5) }}"
                     transition: !input transition_seconds
