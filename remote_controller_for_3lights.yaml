@@ -8,19 +8,19 @@ blueprint:
   domain: automation
   input:
     middle_button:
-      name: Light Entity
+      name: Light Entity For Middle Button
       description: The light to control.
       selector:
         entity:
           domain: light
     left_button:
-      name: Light Entity 2
+      name: Light Entity For Left Button
       description: The light to control.
       selector:
         entity:
           domain: light
     right_button:
-      name: Light Entity 3
+      name: Light Entity For Right Button
       description: The light to control.
       selector:
         entity:
