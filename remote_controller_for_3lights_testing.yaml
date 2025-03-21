@@ -10,18 +10,21 @@ blueprint:
     middle_button:
       name: Light Entity For Middle Button
       description: The light to control.
+      default:
       selector:
         entity:
           domain: light
     left_button:
       name: Light Entity For Left Button
       description: The light to control.
+      default:
       selector:
         entity:
           domain: light
     right_button:
       name: Light Entity For Right Button
       description: The light to control.
+      default:
       selector:
         entity:
           domain: light
