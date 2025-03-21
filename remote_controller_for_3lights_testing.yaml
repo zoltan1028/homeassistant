@@ -161,7 +161,6 @@ action:
             target:
               entity_id: !input middle_button
             data:
-              brightness_pct: 100
               transition: !input transition_for_on_off_state_change_in_seconds
               
       - conditions:
@@ -172,7 +171,7 @@ action:
             target:
               entity_id: !input middle_button
             data:
-              transition: "{{ (transition_on_ff / 255) * current_brightness | float(0) }}"
+              transition: !input transition_for_on_off_state_change_in_seconds
 
       - conditions:
           - condition: trigger
@@ -182,7 +181,6 @@ action:
             target:
               entity_id: !input left_button
             data:
-              brightness_pct: 100
               transition: !input transition_for_on_off_state_change_in_seconds
       - conditions:
           - condition: trigger
@@ -192,7 +190,6 @@ action:
             target:
               entity_id: !input right_button
             data:
-              brightness_pct: 100
               transition: !input transition_for_on_off_state_change_in_seconds
 
       - conditions:
