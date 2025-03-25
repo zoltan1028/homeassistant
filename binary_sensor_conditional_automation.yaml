@@ -11,6 +11,7 @@ blueprint:
         device:
           filter:
             - intergration: mobile_app
+          multiple: false
     remote_controller:
       name: Styrbar Remote Control
       description: IKEA Styrbar
