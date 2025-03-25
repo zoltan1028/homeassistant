@@ -5,13 +5,9 @@ blueprint:
   input:
     device_to_notify:
       name: Mobile Device
-      description: Device that receives the 
-      default: []
+      description: Device that receives the notifications.
       selector:
-        device:
-          filter:
-            - intergration: mobile_app
-          multiple: false
+        device: {}
     remote_controller:
       name: Styrbar Remote Control
       description: IKEA Styrbar
@@ -60,6 +56,7 @@ variables:
   title: !input title
   message: !input message
   device: !input device
+  device_to_notify: !input device_to_notiy
 
 action:
   - choose:
@@ -67,7 +64,7 @@ action:
           - condition: trigger
             id: on_button
         sequence:
-          - action: "notify.mobile_app_{{ device }}"
+          - action: notify.mobile_app_{{ device_attr(device_to_notify, "name") }}
             data:
               title: !input title
               message: !input message
