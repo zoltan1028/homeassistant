@@ -1,0 +1,54 @@
+blueprint:
+  name: Light on gradually triggered by time
+  description: Increasing brightness over time triggered by time.
+  domain: automation
+
+  input:
+    light_entity:
+      name: Light
+      description: The light bulb or group of bulbs to control
+      selector:
+        entity:
+          domain: light
+    trigger_time:
+      name: Trigger time
+      description: The time at which the action should be triggered.
+      selector:
+        time: {}
+    transition_seconds:
+      name: Transition Time (Seconds)
+      description: "The duration in seconds for the light transition effect."
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 3600
+          step: 1
+          unit_of_measurement: "s"
+    maximum_brightness:
+      name: Maximum value of brightness
+      description: "Maximum brightness level."
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 100
+          step: 1
+          unit_of_measurement: "unit"
+
+trigger:
+  - platform: time
+    at: !input trigger_time
+    id: trigger_time
+
+conditions:
+  - condition: trigger
+    id: trigger_time
+
+action:
+  - service: light.turn_on
+    target:
+      entity_id: !input light_entity
+    data:
+      brightness_pct: !input maximum_brightness
+      transition: !input transition_seconds

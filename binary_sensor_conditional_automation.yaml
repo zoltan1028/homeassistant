@@ -1,0 +1,64 @@
+blueprint:
+  name: Binary Sensor Conditional Action
+  description: Binary sensor triggers a conditional action.
+  domain: automation
+  input:
+    remote_controller:
+      name: Styrbar Remote Control
+      description: IKEA Styrbar
+      selector:
+        device: {}
+    binary_sensor_entity:
+      name: Binary Sensor
+      description: The sensor to catch trigger events.
+      selector:
+        entity:
+          domain: binary_sensor
+    title:
+      name: Title
+      description: title
+      default: a
+      selector: 
+        text:
+    message:
+      name: Message
+      description: message
+      default: b
+      selector: 
+        text:
+    device:
+      name: Device
+      description: device
+      default: c
+      selector: 
+        text:
+
+trigger:
+  - platform: state
+    entity_id: !input binary_sensor_entity
+    from: "on"
+    to: "off"
+  - platform: device
+    device_id: !input remote_controller
+    domain: mqtt
+    type: action
+    subtype: "on"
+    id: on_button
+
+variables:
+  binary_sensor_entity: !input binary_sensor_entity
+  on_button: !input remote_controller
+  title: !input title
+  message: !input message
+  device: !input device
+
+action:
+  - choose:
+      - conditions:
+          - condition: trigger
+            id: on_button
+        sequence:
+          - action: "notify.mobile_app_{{ device }}"
+            data:
+              title: !input title
+              message: !input message
