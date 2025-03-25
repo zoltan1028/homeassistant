@@ -31,12 +31,6 @@ blueprint:
       default: b
       selector: 
         text:
-    device:
-      name: Device
-      description: device
-      default: c
-      selector: 
-        text:
 
 trigger:
   - platform: state
@@ -55,7 +49,6 @@ variables:
   on_button: !input remote_controller
   title: !input title
   message: !input message
-  device: !input device
   device_to_notify: !input device_to_notify
 
 action:
