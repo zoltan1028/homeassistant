@@ -56,7 +56,7 @@ variables:
   title: !input title
   message: !input message
   device: !input device
-  device_to_notify: !input device_to_notiy
+  device_to_notify: !input device_to_notify
 
 action:
   - choose:
