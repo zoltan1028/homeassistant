@@ -144,9 +144,6 @@ trigger:
 
 variables:
   middle_button_light: !input middle_button_light
-  left_button_light: !input left_button_light
-  right_button_light: !input right_button_light
-  transitiontime_for_onoff: !input transitiontime_for_onoff
   brightness_step: !input brightness_step
 
 action:
