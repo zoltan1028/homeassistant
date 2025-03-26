@@ -235,7 +235,7 @@ action:
                     entity_id: !input middle_button_light
                   data:
                     color_temp_kelvin: "{{ state_attr(middle_button_light, 'color_temp_kelvin') - 100 }}"
-                  delay:
+                - delay:
                     milliseconds: !input delay_ms
               until:
                 - condition: trigger
@@ -251,7 +251,7 @@ action:
                     entity_id: !input middle_button_light
                   data:
                     color_temp_kelvin: "{{ state_attr(middle_button_light, 'color_temp_kelvin') + 100 }}"
-                  delay:
+                - delay:
                     milliseconds: !input delay_ms
               until:
                 - condition: trigger
