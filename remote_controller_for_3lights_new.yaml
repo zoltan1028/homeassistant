@@ -224,4 +224,36 @@ action:
               until:
                 - condition: trigger
                   id: dim_stop
+      - conditions:
+          - condition: trigger
+            id: change_color_left_hold
+        sequence:
+          - repeat:
+              sequence:
+                - service: light.turn_on
+                  target:
+                    entity_id: !input middle_button_light
+                  data:
+                    color_temp_kelvin: "{{ state_attr(middle_button_light, 'color_temp_kelvin') - 100 }}"
+                  delay:
+                    milliseconds: !input delay_ms
+              until:
+                - condition: trigger
+                  id: change_color_left_release
+      - conditions:
+          - condition: trigger
+            id: change_color_right_hold
+        sequence:
+          - repeat:
+              sequence:
+                - service: light.turn_on
+                  target:
+                    entity_id: !input middle_button_light
+                  data:
+                    color_temp_kelvin: "{{ state_attr(middle_button_light, 'color_temp_kelvin') + 100 }}"
+                  delay:
+                    milliseconds: !input delay_ms
+              until:
+                - condition: trigger
+                  id: change_color_right_release
 mode: restart
