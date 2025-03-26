@@ -7,28 +7,28 @@ blueprint:
     Added incremental color temperature adjustment.
   domain: automation
   input:
-    middle_button:
+    middle_button_light:
       name: Light Entity For Middle Button
       description: The light to control.
       default:
       selector:
         entity:
           domain: light
-    left_button:
+    left_button_light:
       name: Light Entity For Left Button
       description: The light to control.
       default:
       selector:
         entity:
           domain: light
-    right_button:
+    right_button_light:
       name: Light Entity For Right Button
       description: The light to control.
       default:
       selector:
         entity:
           domain: light
-    mqtt_device:
+    remote_controller:
       name: Styrbar Remote Control
       description: The IKEA E2001/E2002 remote control.
       selector:
@@ -63,7 +63,7 @@ blueprint:
           max: 9999
           step: 0.1
           unit_of_measurement: "s"
-    transition_for_on_off_state_change_in_seconds:
+    transitiontime_for_onoff:
       name: Transition Time (Seconds)
       description: "The duration in seconds for the light transition effect when it turns on or off."
       default: 3
@@ -76,121 +76,119 @@ blueprint:
 
 trigger:
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: "on"
-    id: light_on
+    id: middle_light_on
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: "off"
-    id: light_off
+    id: middle_light_off
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: arrow_left_click
-    id: change_color_left
+    id: left_light_toggle
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: arrow_left_hold
     id: change_color_left_hold
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: arrow_left_release
     id: change_color_left_release
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: arrow_right_click
-    id: change_color_right
+    id: right_light_toggle
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: arrow_right_hold
     id: change_color_right_hold
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: arrow_right_release
     id: change_color_right_release
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: brightness_move_down
     id: dim_down
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: brightness_move_up
     id: dim_up
   - platform: device
-    device_id: !input mqtt_device
+    device_id: !input remote_controller
     domain: mqtt
     type: action
     subtype: brightness_stop
     id: dim_stop
 
 variables:
-  middle_button: !input middle_button
-  left_button: !input left_button
-  right_button: !input right_button
-  transition_on_ff: !input transition_for_on_off_state_change_in_seconds
-  step_brightness: !input brightness_step
-  current_brightness: "{{ state_attr(middle_button, 'brightness') | float(0) }}"
-
+  middle_button_light: !input middle_button_light
+  left_button_light: !input left_button_light
+  right_button_light: !input right_button_light
+  transitiontime_for_onoff: !input transitiontime_for_onoff
+  brightness_step: !input brightness_step
 
 action:
   - choose:
       - conditions:
           - condition: trigger
-            id: light_on
+            id: middle_light_on
         sequence:
           - service: light.turn_on
             target:
-              entity_id: !input middle_button
+              entity_id: !input middle_button_light
             data:
-              transition: !input transition_for_on_off_state_change_in_seconds
+              transition: !input transitiontime_for_onoff
               
       - conditions:
           - condition: trigger
-            id: light_off
+            id: middle_light_off
         sequence:
           - service: light.turn_off
             target:
-              entity_id: !input middle_button
+              entity_id: !input middle_button_light
             data:
-              transition: !input transition_for_on_off_state_change_in_seconds
+              transition: !input transitiontime_for_onoff
 
       - conditions:
           - condition: trigger
-            id: change_color_left
+            id: left_light_toggle
         sequence:
           - service: light.toggle
             target:
-              entity_id: !input left_button
+              entity_id: !input left_button_light
             data:
-              transition: !input transition_for_on_off_state_change_in_seconds
+              transition: !input transitiontime_for_onoff
       - conditions:
           - condition: trigger
-            id: change_color_right
+            id: right_light_toggle
         sequence:
           - service: light.toggle
             target:
-              entity_id: !input right_button
+              entity_id: !input right_button_light
             data:
-              transition: !input transition_for_on_off_state_change_in_seconds
+              transition: !input transitiontime_for_onoff
 
       - conditions:
           - condition: trigger
@@ -200,9 +198,9 @@ action:
               sequence:
                 - service: light.turn_on
                   target:
-                    entity_id: !input middle_button
+                    entity_id: !input middle_button_light
                   data:
-                    brightness_step_pct: "-{{ step_brightness | int(5) }}"
+                    brightness_step_pct: "-{{ brightness_step | int(5) }}"
                     transition: !input transition_seconds
                 - delay:
                     milliseconds: !input delay_ms
@@ -217,9 +215,9 @@ action:
               sequence:
                 - service: light.turn_on
                   target:
-                    entity_id: !input middle_button
+                    entity_id: !input middle_button_light
                   data:
-                    brightness_step_pct: "{{ step_brightness | int(5) }}"
+                    brightness_step_pct: "{{ brightness_step | int(5) }}"
                     transition: !input transition_seconds
                 - delay:
                     milliseconds: !input delay_ms
